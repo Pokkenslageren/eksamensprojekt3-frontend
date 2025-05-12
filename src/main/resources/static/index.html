@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farum Cats Australsk Fodbold Klub - Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <h1>Farum Cats Australsk Fodbold Klub - Admin</h1>
+        <button id="logoutBtn" class="btn btn-dark">Log ud</button>
+    </div>
+</header>
+
+<div class="container">
+    <nav class="sidebar">
+        <ul>
+            <li class="active" data-page="medlemmer"><button>Medlemmer</button></li>
+            <li data-page="betalinger"><button>Betalinger</button></li>
+            <li data-page="hold"><button>Hold</button></li>
+            <li data-page="traening"><button>Træning</button></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Medlemsoversigt -->
+        <section id="medlemmer-page" class="page active">
+            <div class="page-header">
+                <h2>Medlemsoversigt</h2>
+                <button class="btn btn-success" id="addMemberBtn">+ Tilføj nyt medlem</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="memberSearch" placeholder="Søg efter medlemmer...">
+            </div>
+
+            <div class="table-container">
+                <table id="membersTable">
+                    <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th>Medlemstype</th>
+                        <th>Betalingsstatus</th>
+                        <th>Handlinger</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Medlemsdata vil blive indsat her via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button id="prevPage" class="btn"><</button>
+                <span id="pageInfo">Side 1 af 3</span>
+                <button id="nextPage" class="btn">></button>
+            </div>
+        </section>
+
+        <!-- Hold sektion -->
+        <section id="hold-page" class="page">
+            <div class="page-header">
+                <h2>Hold</h2>
+                <button class="btn btn-success" id="addTeamBtn">+ Nyt hold</button>
+            </div>
+
+            <div class="teams-container">
+                <div class="team-card">
+                    <h3>Senior hold</h3>
+                    <p>Antal spillere: 18</p>
+                    <p>Træner: Lars Petersen</p>
+                </div>
+                <div class="team-card">
+                    <h3>Ungdomshold</h3>
+                    <p>Antal spillere: 12</p>
+                    <p>Træner: Sofie Hansen</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Træningsplanlægning sektion -->
+        <section id="traening-page" class="page">
+            <div class="page-header">
+                <h2>Træningsplanlægning</h2>
+                <button class="btn btn-success" id="addTrainingBtn">+ Ny træningssession</button>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h3>Maj 2025</h3>
+                </div>
+                <table class="calendar">
+                    <thead>
+                    <tr>
+                        <th>Man</th>
+                        <th>Tirs</th>
+                        <th>Ons</th>
+                        <th>Tors</th>
+                        <th>Fre</th>
+                        <th>Lør</th>
+                        <th>Søn</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Calendar data will be filled in via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Betalinger sektion -->
+        <section id="betalinger-page" class="page">
+            <div class="page-header">
+                <h2>Betalingsoversigt</h2>
+            </div>
+
+            <div class="payment-summary">
+                <div class="summary-card">
+                    <h3>Seniormedlemmer</h3>
+                    <p>Betalt: 12/18</p>
+                    <p>Manglende: 6</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Ungdomsmedlemmer</h3>
+                    <p>Betalt: 8/12</p>
+                    <p>Manglende: 4</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3>Ubetalte kontingenter</h3>
+                <table id="paymentsTable">
+                    <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th>Medlemstype</th>
+                        <th>Beløb</th>
+                        <th>Forfaldsdato</th>
+                        <th>Handlinger</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Payment data will be filled in via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Opret Træningssession Form -->
+        <section id="create-training-page" class="page">
+            <div class="page-header">
+                <h2>Opret Træningssession</h2>
+            </div>
+
+            <form id="trainingForm">
+                <div class="form-group">
+                    <label for="trainingTitle">Titel:</label>
+                    <input type="text" id="trainingTitle" placeholder="F.eks. 'Tekniktræning for seniorhold'" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="trainingDate">Dato:</label>
+                    <div class="date-input">
+                        <input type="text" id="trainingDate" placeholder="Vælg dato" required>
+                        <button type="button" class="calendar-btn"><i class="fas fa-calendar"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="startTime">Starttidspunkt:</label>
+                        <input type="text" id="startTime" placeholder="18:00" required>
+                    </div>
+                    <div class="form-group half">
+                        <label for="endTime">Sluttidspunkt:</label>
+                        <input type="text" id="endTime" placeholder="20:00" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="teamSelect">Hold:</label>
+                    <div class="select-wrapper">
+                        <select id="teamSelect" required>
+                            <option value="1">Senior hold</option>
+                            <option value="2">Ungdomshold</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="trainerSelect">Træner:</label>
+                    <div class="select-wrapper">
+                        <select id="trainerSelect" required>
+                            <option value="1">Lars Petersen</option>
+                            <option value="2">Sofie Hansen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Beskrivelse:</label>
+                    <textarea id="description" placeholder="Beskriv træningens overordnede formål..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Øvelser:</label>
+                    <table id="exercisesTable">
+                        <thead>
+                        <tr>
+                            <th>Øvelsesbeskrivelse</th>
+                            <th>Varighed</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1: Warmup</td>
+                            <td>10 min</td>
+                        </tr>
+                        <tr>
+                            <td>2: 5 star handball</td>
+                            <td>10 min</td>
+                        </tr>
+                        <tr>
+                            <td>3: OG øvelsen</td>
+                            <td>15 min</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="addExerciseBtn" class="btn btn-outline">+ Tilføj øvelse</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelTrainingBtn">Annuller</button>
+                    <button type="submit" class="btn btn-success">Gem træningssession</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+
+<!-- Modals for creating/editing members -->
+<div id="memberModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="memberModalTitle">Tilføj nyt medlem</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="memberForm">
+                <div class="form-group">
+                    <label for="memberName">Navn:</label>
+                    <input type="text" id="memberName" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberEmail">Email:</label>
+                    <input type="email" id="memberEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberAddress">Adresse:</label>
+                    <input type="text" id="memberAddress">
+                </div>
+                <div class="form-group">
+                    <label for="memberDob">Fødselsdato:</label>
+                    <input type="date" id="memberDob">
+                </div>
+                <div class="form-group">
+                    <label for="membershipType">Medlemstype:</label>
+                    <select id="membershipType" required>
+                        <option value="SENIOR">Senior</option>
+                        <option value="YOUTH">Ungdom</option>
+                        <option value="PASSIVE">Passiv</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="memberTeam">Hold:</label>
+                    <select id="memberTeam">
+                        <option value="">Intet hold</option>
+                        <option value="1">Senior hold</option>
+                        <option value="2">Ungdomshold</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelMemberBtn">Annuller</button>
+                    <button type="submit" class="btn btn-success">Gem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
