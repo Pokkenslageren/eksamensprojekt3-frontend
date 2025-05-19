@@ -10,16 +10,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let members = [];
     let editingMemberId = null;
 
+    const API_BASE = "http://localhost:8080/api/members";
+
     // Hent alle medlemmer (READ)
     async function fetchMembers() {
         try {
-            const res = await fetch("/api/members");
-            members = await res.json();
-            renderMemberTable();
+            const res = await fetch(API_BASE);
+            const members = await res.json();
+            renderMemberTable(members);
         } catch (err) {
             console.error("Fejl ved hentning af medlemmer:", err);
         }
     }
+
 
     // Vis medlemmer i tabel
     function renderMemberTable() {
@@ -66,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Udfyld modal med eksisterende data (UPDATE)
     window.editMember = async function(id) {
         try {
-            const res = await fetch(`/api/members/${id}`);
+            const res = await fetch(`http://localhost:8080/api/members/${id}`);
             const member = await res.json();
 
             editingMemberId = id;
@@ -90,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = getFormData();
         const method = editingMemberId ? "PUT" : "POST";
-        const url = editingMemberId ? `/api/members/${editingMemberId}` : "/api/members";
+        const url = editingMemberId ? `http://localhost:8080/api/members/${editingMemberId}` : "http://localhost:8080/api/members";
 
         try {
             const res = await fetch(url, {
@@ -113,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!confirm("Er du sikker på, at du vil slette dette medlem?")) return;
 
         try {
-            const res = await fetch(`/api/members/${id}`, {
+            const res = await fetch(`http://localhost:8080/api/members/${id}`, {
                 method: "DELETE"
             });
 
