@@ -1,33 +1,30 @@
-// training.js - stripped down to focus on creating sessions
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Form elements
+    // Formen
     const trainingForm = document.getElementById('trainingForm');
     const addExerciseBtn = document.getElementById('addExerciseBtn');
     const exercisesTable = document.getElementById('exercisesTable').querySelector('tbody');
     const cancelTrainingBtn = document.getElementById('cancelTrainingBtn');
 
-    // Load existing exercises for adding to sessions
+    // Load exercises
     loadExercises();
 
-    // Add exercise button handler
+    //exercise button handler
     addExerciseBtn.addEventListener('click', function() {
         addExerciseRow();
     });
 
-    // Cancel button handler
+
     cancelTrainingBtn.addEventListener('click', function() {
-        // Navigate back to main training page
         document.getElementById('traening-page').classList.add('active');
         document.getElementById('create-training-page').classList.remove('active');
     });
 
-    // Form submission handler
     trainingForm.addEventListener('submit', function(e) {
         e.preventDefault();
         saveTrainingSession();
     });
 
-    // Load available exercises from the backend
     function loadExercises() {
         fetch('/fodboldklub/exercises')
             .then(response => response.json())
@@ -41,23 +38,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Add a new exercise row to the table
     function addExerciseRow() {
-        // Create row with exercise selection, duration and notes
         const newRow = document.createElement('tr');
 
-        // Exercise selection cell
         const exerciseCell = document.createElement('td');
         const exerciseSelect = document.createElement('select');
         exerciseSelect.className = 'exercise-select';
 
-        // Add empty option
         const emptyOption = document.createElement('option');
         emptyOption.value = '';
         emptyOption.textContent = 'Vælg øvelse...';
         exerciseSelect.appendChild(emptyOption);
 
-        // Add options for all available exercises
         if (window.availableExercises) {
             window.availableExercises.forEach(exercise => {
                 const option = document.createElement('option');
@@ -68,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Auto-fill duration when exercise is selected
+        // autofill læmgde
         exerciseSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const duration = selectedOption.dataset.duration || '';
@@ -77,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         exerciseCell.appendChild(exerciseSelect);
 
-        // Duration cell
         const durationCell = document.createElement('td');
         const durationInput = document.createElement('input');
         durationInput.type = 'number';
@@ -86,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
         durationInput.min = '1';
         durationCell.appendChild(durationInput);
 
-        // Notes cell
         const notesCell = document.createElement('td');
         const notesInput = document.createElement('input');
         notesInput.type = 'text';
@@ -94,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         notesInput.placeholder = 'Noter til øvelsen...';
         notesCell.appendChild(notesInput);
 
-        // Delete button cell
         const actionsCell = document.createElement('td');
         const deleteBtn = document.createElement('button');
         deleteBtn.type = 'button';
@@ -105,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         actionsCell.appendChild(deleteBtn);
 
-        // Add cells to row and row to table
         newRow.appendChild(exerciseCell);
         newRow.appendChild(durationCell);
         newRow.appendChild(notesCell);
@@ -113,23 +101,19 @@ document.addEventListener('DOMContentLoaded', function() {
         exercisesTable.appendChild(newRow);
     }
 
-    // Save training session to the backend
     function saveTrainingSession() {
         // Basic validation
         if (!validateForm()) {
             return;
         }
 
-        // Get form data
         const dateStr = document.getElementById('trainingDate').value;
         const startTime = document.getElementById('startTime').value;
         const teamId = document.getElementById('teamSelect').value;
         const location = document.getElementById('location').value || 'Farum Park';
 
-        // Parse date and time - adjust the format based on your date input
         let dateTime;
         try {
-            // Assuming date format is DD/MM/YYYY
             const [day, month, year] = dateStr.split('/');
             const [hours, minutes] = startTime.split(':');
             dateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
@@ -138,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Collect exercises
         const exercises = [];
         const exerciseRows = exercisesTable.querySelectorAll('tr');
 
@@ -153,7 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Create request payload
         const payload = {
             session: {
                 dateTime: dateTime,
@@ -182,11 +164,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 alert('Træningssession blev oprettet!');
 
-                // Navigate back to training overview
                 document.getElementById('traening-page').classList.add('active');
                 document.getElementById('create-training-page').classList.remove('active');
 
-                // Optional: Refresh the calendar or list of sessions
                 loadSessions();
             })
             .catch(error => {
@@ -195,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Simple form validation
     function validateForm() {
         const dateStr = document.getElementById('trainingDate').value;
         if (!dateStr) {
@@ -232,14 +211,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return true;
     }
-
-    // Optional: Load sessions for the calendar view
+    //todo delete eventuelt
     function loadSessions() {
         fetch('/fodboldklub/sessions')
             .then(response => response.json())
             .then(sessions => {
                 console.log('Sessions loaded:', sessions);
-                // Update UI as needed
             })
             .catch(error => {
                 console.error('Error loading sessions:', error);
