@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<h1>API Test</h1>
+<div>
+    <button onclick="testSessions()">Test Sessions</button>
+    <button onclick="testExercises()">Test Exercises</button>
+    <button onclick="testMembers()">Test Members</button>
+    <button onclick="testTeams()">Test Teams</button>
+</div>
+<div id="results">Results will appear here...</div>
+
+<script>
+    function testSessions() {
+        fetchApi('/sessions', 'Sessions');
+    }
+
+    function testExercises() {
+        fetchApi('/exercises', 'Exercises');
+    }
+
+    function testMembers() {
+        fetchApi('/members', 'Members');
+    }
+
+    function testTeams() {
+        fetchApi('/teams', 'Teams');
+    }
+
+    function fetchApi(url, label) {
+        document.getElementById('results').textContent = 'Loading ' + label + '...';
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('results').textContent =
+                    label + ' data:\n\n' + JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('results').textContent =
+                    'Error fetching ' + label + ': ' + error.message;
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
