@@ -633,8 +633,7 @@ function deleteSession(sessionId) {
  * Edit a session
  */
 function editSession(sessionId) {
-    // This would be implemented for the edit functionality
-    // For now, just show a message
+
     alert('Redigering af træningssessioner er ikke implementeret endnu.');
 }
 
@@ -709,11 +708,19 @@ function addExerciseRow() {
 function saveTrainingSession() {
     console.log("Saving training session...");
 
+    const form = document.getElementById('trainingForm');
+
+    if (form.dataset.submitting === "true") {
+        console.log("Form is already being submitted, ignoring duplicate submission");
+        return;
+    }
+    form.dataset.submitting = "true";
+
     if (!validateTrainingForm()) {
+        form.dataset.submitting = "false";
         return;
     }
 
-    const form = document.getElementById('trainingForm');
     const isEditMode = form.dataset.editMode === 'true';
     const sessionId = isEditMode ? form.dataset.sessionId : null;
 
@@ -728,7 +735,6 @@ function saveTrainingSession() {
     const [hours, minutes] = startTime.split(':');
     const dateTime = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
 
-    // Collect exercises from the form
     const exercises = [];
     const exerciseRows = document.querySelectorAll('#exercisesTable tbody tr');
 
@@ -786,11 +792,15 @@ function saveTrainingSession() {
             form.dataset.editMode = 'false';
             form.dataset.sessionId = '';
 
+            form.dataset.submitting = "false";
+
             showTrainingPage();
         })
         .catch(error => {
             console.error(`Error ${isEditMode ? 'updating' : 'creating'} session:`, error);
             alert(`Der opstod en fejl ved ${isEditMode ? 'opdatering' : 'oprettelse'} af træningssessionen: ${error.message}`);
+
+            form.dataset.submitting = "false";
         });
 }
 
