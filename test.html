@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px; margin: 5px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<h1>API Test</h1>
+
+<button onclick="testGet()">Test GET /sessions</button>
+<button onclick="testPost()">Test POST /sessions</button>
+
+<h2>Results:</h2>
+<pre id="results">Click a button to test the API</pre>
+
+<script>
+    function testGet() {
+        document.getElementById('results').textContent = 'Loading...';
+
+        fetch('http://localhost:8080/sessions')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('results').textContent = 'Error: ' + error.message;
+            });
+    }
+
+    function testPost() {
+        document.getElementById('results').textContent = 'Sending...';
+
+        const data = {
+            session: {
+                dateTime: "2025-05-25T18:00:00",
+                location: "Farum Park",
+                team: {
+                    teamId: 1
+                }
+            },
+            exercises: [
+                {
+                    exerciseId: 1,
+                    orderNum: 1,
+                    notes: "Basic test exercise"
+                }
+            ]
+        };
+
+        fetch('http://localhost:8080/sessions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`HTTP error! Status: ${response.status}, Message: ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('results').textContent = 'Error: ' + error.message;
+            });
+    }
+</script>
+</body>
+</html>
