@@ -453,3 +453,27 @@ table tr:nth-child(even) {
         width: 90%;
     }
 }
+
+.status-paid {
+    color: green;
+    font-weight: bold;
+}
+
+.status-unpaid {
+    color: red;
+    font-weight: bold;
+}
+
+.status-partial {
+    color: orange;
+    font-weight: bold;
+}
+
+th {
+    cursor: pointer;
+    user-select: none;
+}
+
+th:hover {
+    background-color: #e0e0e0;
+}
