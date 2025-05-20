@@ -22,6 +22,7 @@
             <li data-page="betalinger"><button>Betalinger</button></li>
             <li data-page="hold"><button>Hold</button></li>
             <li data-page="traening"><button>Træning</button></li>
+            <li data-page="exercises"><button>Øvelser</button></li>
         </ul>
     </nav>
 
@@ -67,7 +68,8 @@
                 <button class="btn btn-success" id="addTeamBtn">+ Nyt hold</button>
             </div>
 
-            <div class="teams-container">
+            <div class="teams-container" id="teamsContainer">
+                <!-- Teams will be loaded dynamically -->
                 <div class="team-card">
                     <h3>Senior hold</h3>
                     <p>Antal spillere: 18</p>
@@ -90,7 +92,7 @@
 
             <div class="calendar-container">
                 <div class="calendar-header">
-                    <h3>Maj 2025</h3>
+                    <h3 id="calendarMonthYear">Maj 2025</h3>
                 </div>
                 <table class="calendar">
                     <thead>
@@ -104,10 +106,31 @@
                         <th>Søn</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="calendarBody">
                     <!-- Calendar data will be filled in via JavaScript -->
                     </tbody>
                 </table>
+            </div>
+
+            <div class="sessions-list">
+                <h3>Kommende træningssessioner</h3>
+                <div class="table-container">
+                    <table id="sessionsTable">
+                        <thead>
+                        <tr>
+                            <th>Dato</th>
+                            <th>Tid</th>
+                            <th>Hold</th>
+                            <th>Lokation</th>
+                            <th>Antal øvelser</th>
+                            <th>Handlinger</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Session data will be filled in via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
@@ -164,7 +187,7 @@
                 <div class="form-group">
                     <label for="trainingDate">Dato:</label>
                     <div class="date-input">
-                        <input type="text" id="trainingDate" placeholder="Vælg dato" required>
+                        <input type="text" id="trainingDate" placeholder="DD/MM/ÅÅÅÅ" required>
                         <button type="button" class="calendar-btn"><i class="fas fa-calendar"></i></button>
                     </div>
                 </div>
@@ -184,20 +207,14 @@
                     <label for="teamSelect">Hold:</label>
                     <div class="select-wrapper">
                         <select id="teamSelect" required>
-                            <option value="1">Senior hold</option>
-                            <option value="2">Ungdomshold</option>
+                            <option value="">Vælg hold...</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="trainerSelect">Træner:</label>
-                    <div class="select-wrapper">
-                        <select id="trainerSelect" required>
-                            <option value="1">Lars Petersen</option>
-                            <option value="2">Sofie Hansen</option>
-                        </select>
-                    </div>
+                    <label for="location">Lokation:</label>
+                    <input type="text" id="location" placeholder="F.eks. 'Farum Park'" value="Farum Park" required>
                 </div>
 
                 <div class="form-group">
@@ -210,34 +227,140 @@
                     <table id="exercisesTable">
                         <thead>
                         <tr>
-                            <th>Øvelsesbeskrivelse</th>
-                            <th>Varighed</th>
+                            <th>Øvelse</th>
+                            <th>Varighed (min)</th>
+                            <th>Noter</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1: Warmup</td>
-                            <td>10 min</td>
-                        </tr>
-                        <tr>
-                            <td>2: 5 star handball</td>
-                            <td>10 min</td>
-                        </tr>
-                        <tr>
-                            <td>3: OG øvelsen</td>
-                            <td>15 min</td>
-                        </tr>
+                        <!-- Exercise rows will be added dynamically -->
                         </tbody>
                     </table>
                     <button type="button" id="addExerciseBtn" class="btn btn-outline">+ Tilføj øvelse</button>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelTrainingBtn">Annuller</button>
+                    <button type="button" class="btn btn-secondary" id="cancelTrainingBtn" onclick="showTrainingPage()">Annuller</button>
                     <button type="submit" class="btn btn-success">Gem træningssession</button>
                 </div>
             </form>
         </section>
+
+        <!-- View Training Session Details -->
+        <section id="view-training-page" class="page">
+            <div class="page-header">
+                <h2>Træningssession Detaljer</h2>
+                <button class="btn btn-secondary" id="backToTrainingBtn">Tilbage til oversigt</button>
+            </div>
+
+            <div class="session-details">
+                <div class="session-info">
+                    <h3 id="sessionTitle">Tekniktræning for seniorhold</h3>
+                    <p><strong>Dato:</strong> <span id="sessionDate">10/05/2025</span></p>
+                    <p><strong>Tid:</strong> <span id="sessionTime">18:00 - 19:30</span></p>
+                    <p><strong>Hold:</strong> <span id="sessionTeam">Senior hold</span></p>
+                    <p><strong>Lokation:</strong> <span id="sessionLocation">Farum Park</span></p>
+                    <p><strong>Beskrivelse:</strong> <span id="sessionDescription">Tekniktræning med fokus på spark og greb.</span></p>
+                </div>
+
+                <div class="session-exercises">
+                    <h3>Øvelser</h3>
+                    <table id="sessionExercisesTable">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Øvelse</th>
+                            <th>Varighed</th>
+                            <th>Noter</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Session exercises will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="session-actions">
+                    <button class="btn btn-primary" id="editSessionBtn">Rediger session</button>
+                    <button class="btn btn-danger" id="deleteSessionBtn">Slet session</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Management Page -->
+        <section id="exercises-page" class="page">
+            <div class="page-header">
+                <h2>Øvelser</h2>
+                <button class="btn btn-success" id="addExerciseManageBtn">+ Ny øvelse</button>
+            </div>
+
+            <div class="table-container">
+                <table id="exercisesManageTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Navn</th>
+                        <th>Beskrivelse</th>
+                        <th>Varighed (min)</th>
+                        <th>Handlinger</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Exercise data  -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Exercise Form Modal -->
+        <div id="exerciseModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="exerciseModalTitle">Tilføj ny øvelse</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="exerciseForm">
+                        <input type="hidden" id="exerciseId">
+                        <div class="form-group">
+                            <label for="exerciseName">Navn:</label>
+                            <input type="text" id="exerciseName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exerciseDescription">Beskrivelse:</label>
+                            <textarea id="exerciseDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exerciseDuration">Varighed (minutter):</label>
+                            <input type="number" id="exerciseDuration" min="1" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelExerciseBtn">Annuller</button>
+                            <button type="submit" class="btn btn-success">Gem</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirm Delete Exercise Modal -->
+        <div id="confirmDeleteExerciseModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Bekræft Sletning</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>Er du sikker på, at du vil slette denne øvelse?</p>
+                    <p>Denne handling kan ikke fortrydes.</p>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelDeleteExerciseBtn">Annuller</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteExerciseBtn">Slet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
 
@@ -291,6 +414,27 @@
     </div>
 </div>
 
-<script src="app.js"></script>
+<!-- Confirm Delete Modal -->
+<div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Bekræft Sletning</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Er du sikker på, at du vil slette denne træningssession?</p>
+            <p>Denne handling kan ikke fortrydes.</p>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Annuller</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Slet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="apptemp.js"></script>
+<script src="training.js"></script>
+<script src="exercises.js"></script>
+
 </body>
 </html>
