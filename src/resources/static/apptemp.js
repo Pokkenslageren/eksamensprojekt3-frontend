@@ -56,6 +56,12 @@ function showPage(pageId) {
     if (pageId === 'exercises' && typeof loadExercisesManagement === 'function') {
         loadExercisesManagement();
     }
+
+    // ✅ New: initialize the member page
+    if (pageId === 'betalinger' && typeof initMemberPage === 'function') {
+        setTimeout(() => initMemberPage(), 50); // slight delay after page is shown
+    }
+
 }
 
 /**
