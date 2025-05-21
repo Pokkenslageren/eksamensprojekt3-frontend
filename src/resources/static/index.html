@@ -38,21 +38,6 @@
                 <input type="text" id="memberSearch" placeholder="Søg efter medlemmer...">
             </div>
 
-            <div class="table-container">
-                <table id="membersTable">
-                    <thead>
-                    <tr>
-                        <th>Navn</th>
-                        <th>Medlemstype</th>
-                        <th>Betalingsstatus</th>
-                        <th>Handlinger</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Medlemsdata vil blive indsat her via JavaScript -->
-                    </tbody>
-                </table>
-            </div>
 
             <div class="pagination">
                 <button id="prevPage" class="btn"><</button>
@@ -153,6 +138,34 @@
                 </div>
             </div>
 
+            <div class="filter-container">
+                <label for="statusFilter">Filtrer betalingsstatus:</label>
+                <select id="statusFilter">
+                    <option value="ALL">Alle</option>
+                    <option value="PAID">Betalt</option>
+                    <option value="UNPAID">Ikke betalt</option>
+                    <option value="PARTIALLY_PAID">Delvist betalt</option>
+                </select>
+            </div>
+
+
+            <div class="table-container">
+                <table id="membersTable">
+                    <thead>
+                    <tr>
+                        <th>MedlemsID</th>
+                        <th>Navn</th>
+                        <th>Mail</th>
+                        <th>Betalingsstatus</th>
+                        <th>Handling</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Medlemsdata vil blive indsat her via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <!--
             <div class="table-container">
                 <h3>Ubetalte kontingenter</h3>
                 <table id="paymentsTable">
@@ -166,10 +179,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Payment data will be filled in via JavaScript -->
+
                     </tbody>
                 </table>
-            </div>
+            </div> -->
+
         </section>
 
         <!-- Opret Træningssession Form -->
@@ -435,6 +449,6 @@
 <script src="apptemp.js"></script>
 <script src="training.js"></script>
 <script src="exercises.js"></script>
-
+<script src="member-list.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let members = [];
     let editingMemberId = null;
 
-    const API_BASE = "http://localhost:8080/api/members";
+    const API_BASE = "http://localhost:8080/fodboldklub/members";
 
     // Hent alle medlemmer (READ)
     async function fetchMembers() {
