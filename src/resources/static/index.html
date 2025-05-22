@@ -38,6 +38,23 @@
                 <input type="text" id="memberSearch" placeholder="Søg efter medlemmer...">
             </div>
 
+            <div class="table-container">
+                <table id="usersTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Brugernavn</th>
+                        <th>Rolle</th>
+                        <th>Handling</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rækker indsættes dynamisk -->
+                    </tbody>
+                </table>
+            </div>
+
+
 
             <div class="pagination">
                 <button id="prevPage" class="btn"><</button>
@@ -423,6 +440,19 @@
                     <button type="button" class="btn btn-secondary" id="cancelMemberBtn">Annuller</button>
                     <button type="submit" class="btn btn-success">Gem</button>
                 </div>
+
+                <input type="hidden" id="userId">
+
+                <div class="form-group">
+                    <label for="memberRole">Rolle:</label>
+                    <select id="memberRole" required>
+                        <option value="">Vælg rolle...</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="COACH">Træner</option>
+                        <option value="PLAYER">Spiller</option>
+                    </select>
+                </div>
+
             </form>
         </div>
     </div>
@@ -450,5 +480,6 @@
 <script src="training.js"></script>
 <script src="exercises.js"></script>
 <script src="member-list.js"></script>
+<script src="user-management.js"></script>
 </body>
 </html>
