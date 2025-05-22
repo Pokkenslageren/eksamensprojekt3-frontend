@@ -33,6 +33,11 @@ async function editUser(id) {
     document.getElementById("memberName").value = user.username;
     document.getElementById("memberRole").value = user.userRole;
     document.getElementById("memberModal").style.display = "block";
+
+    if (!userRole) {
+        alert("Vælg en rolle før du gemmer.");
+        return;
+    }
 }
 
 async function deleteUser(id) {
@@ -54,7 +59,7 @@ document.getElementById("memberForm").addEventListener("submit", async (e) => {
     const id = document.getElementById("userId").value;
     const username = document.getElementById("memberName").value;
     const userRole = document.getElementById("memberRole").value;
-    const password = "default123"; // Du kan udvide til at spørge om password
+    const password = "default123"; // Kan udvides til at spørge om password
 
     const userData = { username, password, userRole };
 
