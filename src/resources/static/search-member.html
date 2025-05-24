@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Medlemssøgning</title>
+</head>
+<body>
+<h2>Søg medlemmer</h2>
+
+<label for="name">Navn:</label>
+<input type="text" id="name" placeholder="Skriv navn"><br><br>
+
+<label for="email">Email:</label>
+<input type="text" id="email" placeholder="Skriv email"><br><br>
+
+<label for="status">Betalingsstatus:</label>
+<select id="status">
+    <option value="">Vælg status</option>
+    <option value="PAID">PAID</option>
+    <option value="UNPAID">UNPAID</option>
+</select><br><br>
+
+<button onclick="searchMembers()">Søg</button>
+
+<h3>Resultater:</h3>
+<ul id="resultList"></ul>
+<script src="search-member.js"></script>
+</body>
+</html>
