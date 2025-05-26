@@ -10,33 +10,57 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize the exercises page
  */
 function initExercisesPage() {
+    // Prevent double initialization
+    if (window.exercisesPageInitialized) {
+        return;
+    }
+    window.exercisesPageInitialized = true;
+
+    setupEventListeners();
+}
+
+/**
+ * Set up all event listeners for exercises page
+ */
+function setupEventListeners() {
     const addExerciseBtn = document.getElementById('addExerciseManageBtn');
     if (addExerciseBtn) {
+        addExerciseBtn.removeEventListener('click', showAddExerciseModal);
         addExerciseBtn.addEventListener('click', showAddExerciseModal);
     }
 
     const exerciseForm = document.getElementById('exerciseForm');
     if (exerciseForm) {
+        exerciseForm.removeEventListener('submit', handleExerciseSubmit);
         exerciseForm.addEventListener('submit', handleExerciseSubmit);
     }
 
     const cancelBtn = document.getElementById('cancelExerciseBtn');
     if (cancelBtn) {
+        cancelBtn.removeEventListener('click', closeExerciseModal);
         cancelBtn.addEventListener('click', closeExerciseModal);
     }
 
     const closeBtn = document.querySelector('#exerciseModal .close');
     if (closeBtn) {
+        closeBtn.removeEventListener('click', closeExerciseModal);
         closeBtn.addEventListener('click', closeExerciseModal);
     }
-    document.getElementById('cancelDeleteExerciseBtn').addEventListener('click', function() {
-        document.getElementById('confirmDeleteExerciseModal').style.display = 'none';
-    });
 
-    document.querySelector('#confirmDeleteExerciseModal .close').addEventListener('click', function() {
-        document.getElementById('confirmDeleteExerciseModal').style.display = 'none';
-    });
+    // Delete modal event listeners
+    const cancelDeleteBtn = document.getElementById('cancelDeleteExerciseBtn');
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.removeEventListener('click', closeDeleteModal);
+        cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    }
 
+    const closeDeleteBtn = document.querySelector('#confirmDeleteExerciseModal .close');
+    if (closeDeleteBtn) {
+        closeDeleteBtn.removeEventListener('click', closeDeleteModal);
+        closeDeleteBtn.addEventListener('click', closeDeleteModal);
+    }
+
+    // Window click to close modals
     window.addEventListener('click', function(event) {
         const exerciseModal = document.getElementById('exerciseModal');
         const deleteModal = document.getElementById('confirmDeleteExerciseModal');
@@ -55,10 +79,12 @@ function initExercisesPage() {
  * Load and display exercises
  */
 function loadExercisesManagement() {
+    console.log("Loading exercises for management...");
+
     fetch('http://localhost:8080/fodboldklub/exercises')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch exercises: ' + response.status);
+                throw new Error(`Failed to fetch exercises: ${response.status}`);
             }
             return response.json();
         })
@@ -67,15 +93,23 @@ function loadExercisesManagement() {
         })
         .catch(error => {
             console.error('Error loading exercises:', error);
-            alert('Der opstod en fejl ved indlæsning af øvelser.');
+            const tableBody = document.querySelector('#exercisesManageTable tbody');
+            if (tableBody) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Kunne ikke indlæse øvelser</td></tr>';
+            }
         });
 }
 
 /**
- * Display exercises in the table
+ * Display exercises in the management table
  */
 function displayExercises(exercises) {
     const tableBody = document.querySelector('#exercisesManageTable tbody');
+    if (!tableBody) {
+        console.error("Exercise table body not found");
+        return;
+    }
+
     tableBody.innerHTML = '';
 
     if (!exercises || exercises.length === 0) {
@@ -87,7 +121,6 @@ function displayExercises(exercises) {
 
     exercises.forEach(exercise => {
         const row = document.createElement('tr');
-
         row.innerHTML = `
             <td>${exercise.exerciseId}</td>
             <td>${exercise.name}</td>
@@ -98,19 +131,31 @@ function displayExercises(exercises) {
                 <button class="btn btn-danger btn-sm delete-exercise" data-id="${exercise.exerciseId}">Slet</button>
             </td>
         `;
-
         tableBody.appendChild(row);
     });
 
+    setupTableEventListeners();
+}
+
+/**
+ * Set up event listeners for table buttons
+ */
+function setupTableEventListeners() {
     document.querySelectorAll('.edit-exercise').forEach(button => {
-        button.addEventListener('click', function() {
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+
+        newButton.addEventListener('click', function() {
             const exerciseId = this.dataset.id;
             editExercise(exerciseId);
         });
     });
 
     document.querySelectorAll('.delete-exercise').forEach(button => {
-        button.addEventListener('click', function() {
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+
+        newButton.addEventListener('click', function() {
             const exerciseId = this.dataset.id;
             confirmDeleteExercise(exerciseId);
         });
@@ -121,8 +166,11 @@ function displayExercises(exercises) {
  * Show the add exercise modal
  */
 function showAddExerciseModal() {
+    console.log("Showing add exercise modal");
 
-    document.getElementById('exerciseForm').reset();
+    const form = document.getElementById('exerciseForm');
+    form.reset();
+
     document.getElementById('exerciseId').value = '';
     document.getElementById('exerciseModalTitle').textContent = 'Tilføj ny øvelse';
     document.getElementById('exerciseModal').style.display = 'block';
@@ -136,17 +184,27 @@ function closeExerciseModal() {
 }
 
 /**
+ * Close the delete confirmation modal
+ */
+function closeDeleteModal() {
+    document.getElementById('confirmDeleteExerciseModal').style.display = 'none';
+}
+
+/**
  * Edit an exercise
  */
 function editExercise(exerciseId) {
+    console.log("Editing exercise with ID:", exerciseId);
+
     fetch(`http://localhost:8080/fodboldklub/exercises/${exerciseId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch exercise: ' + response.status);
+                throw new Error(`Failed to fetch exercise: ${response.status}`);
             }
             return response.json();
         })
         .then(exercise => {
+            console.log("Exercise data loaded for editing:", exercise);
 
             document.getElementById('exerciseId').value = exercise.exerciseId;
             document.getElementById('exerciseName').value = exercise.name;
@@ -166,12 +224,17 @@ function editExercise(exerciseId) {
  * Confirm delete exercise
  */
 function confirmDeleteExercise(exerciseId) {
-    document.getElementById('confirmDeleteExerciseBtn').dataset.id = exerciseId;
+    console.log("Confirming delete for exercise ID:", exerciseId);
 
-    document.getElementById('confirmDeleteExerciseBtn').onclick = function() {
-        deleteExercise(this.dataset.id);
-        document.getElementById('confirmDeleteExerciseModal').style.display = 'none';
-    };
+    const confirmBtn = document.getElementById('confirmDeleteExerciseBtn');
+
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+    newConfirmBtn.addEventListener('click', function() {
+        deleteExercise(exerciseId);
+        closeDeleteModal();
+    });
 
     document.getElementById('confirmDeleteExerciseModal').style.display = 'block';
 }
@@ -180,28 +243,38 @@ function confirmDeleteExercise(exerciseId) {
  * Delete an exercise
  */
 function deleteExercise(exerciseId) {
+    console.log("Deleting exercise with ID:", exerciseId);
+
     fetch(`http://localhost:8080/fodboldklub/exercises/${exerciseId}`, {
         method: 'DELETE'
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to delete exercise: ' + response.status);
+                throw new Error(`Failed to delete exercise: ${response.status}`);
             }
             return response.json();
         })
         .then(result => {
             if (result.deleted) {
                 alert('Øvelsen blev slettet.');
+
                 loadExercisesManagement();
 
-                loadExercises();
+                if (typeof loadExercises === 'function') {
+                    loadExercises();
+                }
             } else {
                 alert('Der opstod en fejl ved sletning af øvelsen.');
             }
         })
         .catch(error => {
             console.error('Error deleting exercise:', error);
-            alert('Der opstod en fejl ved sletning af øvelsen: ' + error.message);
+
+            if (error.message.includes('400')) {
+                alert('Øvelsen kan ikke slettes da den er i brug i træningssessioner.');
+            } else {
+                alert('Der opstod en fejl ved sletning af øvelsen: ' + error.message);
+            }
         });
 }
 
@@ -211,12 +284,24 @@ function deleteExercise(exerciseId) {
 function handleExerciseSubmit(event) {
     event.preventDefault();
 
+    const form = event.target;
+
+    // Prevent double submission
+    if (form.dataset.submitting === 'true') {
+        return;
+    }
+    form.dataset.submitting = 'true';
+
     const exerciseId = document.getElementById('exerciseId').value;
     const isEdit = exerciseId !== '';
+    if (!validateExerciseForm()) {
+        form.dataset.submitting = 'false';
+        return;
+    }
 
     const exercise = {
-        name: document.getElementById('exerciseName').value,
-        description: document.getElementById('exerciseDescription').value,
+        name: document.getElementById('exerciseName').value.trim(),
+        description: document.getElementById('exerciseDescription').value.trim(),
         duration: parseInt(document.getElementById('exerciseDuration').value)
     };
 
@@ -230,6 +315,8 @@ function handleExerciseSubmit(event) {
 
     const method = isEdit ? 'PUT' : 'POST';
 
+    console.log(`${method} ${url}`, exercise);
+
     fetch(url, {
         method: method,
         headers: {
@@ -239,19 +326,58 @@ function handleExerciseSubmit(event) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to save exercise: ' + response.status);
+                return response.text().then(text => {
+                    throw new Error(`Server error: ${text}`);
+                });
             }
             return response.json();
         })
         .then(savedExercise => {
+            console.log("Exercise saved:", savedExercise);
+
             alert(`Øvelsen blev ${isEdit ? 'opdateret' : 'oprettet'}.`);
+
             closeExerciseModal();
             loadExercisesManagement();
 
-            loadExercises();
+            // Reload exercises for training forms (if function exists)
+            if (typeof loadExercises === 'function') {
+                loadExercises();
+            }
         })
         .catch(error => {
             console.error('Error saving exercise:', error);
             alert('Der opstod en fejl ved ' + (isEdit ? 'opdatering' : 'oprettelse') + ' af øvelsen: ' + error.message);
+        })
+        .finally(() => {
+            form.dataset.submitting = 'false';
         });
 }
+
+/**
+ * Validate the exercise form
+ */
+function validateExerciseForm() {
+    const name = document.getElementById('exerciseName').value.trim();
+    if (!name) {
+        alert('Indtast venligst et navn for øvelsen.');
+        return false;
+    }
+
+    const description = document.getElementById('exerciseDescription').value.trim();
+    if (!description) {
+        alert('Indtast venligst en beskrivelse for øvelsen.');
+        return false;
+    }
+
+    const duration = parseInt(document.getElementById('exerciseDuration').value);
+    if (!duration || duration < 1) {
+        alert('Indtast venligst en gyldig varighed (mindst 1 minut).');
+        return false;
+    }
+
+    return true;
+}
+
+// Make loadExercisesManagement globally available
+window.loadExercisesManagement = loadExercisesManagement;
