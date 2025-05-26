@@ -7,6 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const membersTableBody = document.querySelector("#membersTable tbody");
     const modalTitle = document.getElementById("memberModalTitle");
     const memberModal = document.getElementById("memberModal");
+    const closeButtons = document.querySelectorAll(".modal .close");
+    closeButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            btn.closest(".modal").style.display = "none";
+        });
+    });
 
     let members = [];
     let editingMemberId = null;
