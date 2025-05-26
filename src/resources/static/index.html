@@ -39,20 +39,22 @@
             </div>
 
             <div class="table-container">
-                <table id="membersTable">
+                <table id="usersTable">
                     <thead>
                     <tr>
-                        <th>Navn</th>
-                        <th>Medlemstype</th>
-                        <th>Betalingsstatus</th>
-                        <th>Handlinger</th>
+                        <th>ID</th>
+                        <th>Brugernavn</th>
+                        <th>Rolle</th>
+                        <th>Handling</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Medlemsdata vil blive indsat her via JavaScript -->
+                    <!-- Rækker indsættes dynamisk -->
                     </tbody>
                 </table>
             </div>
+
+
 
             <div class="pagination">
                 <button id="prevPage" class="btn"><</button>
@@ -153,6 +155,34 @@
                 </div>
             </div>
 
+            <div class="filter-container">
+                <label for="statusFilter">Filtrer betalingsstatus:</label>
+                <select id="statusFilter">
+                    <option value="ALL">Alle</option>
+                    <option value="PAID">Betalt</option>
+                    <option value="UNPAID">Ikke betalt</option>
+                    <option value="PARTIALLY_PAID">Delvist betalt</option>
+                </select>
+            </div>
+
+
+            <div class="table-container">
+                <table id="membersTable">
+                    <thead>
+                    <tr>
+                        <th>MedlemsID</th>
+                        <th>Navn</th>
+                        <th>Mail</th>
+                        <th>Betalingsstatus</th>
+                        <th>Handling</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Medlemsdata vil blive indsat her via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <!--
             <div class="table-container">
                 <h3>Ubetalte kontingenter</h3>
                 <table id="paymentsTable">
@@ -166,10 +196,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Payment data will be filled in via JavaScript -->
+
                     </tbody>
                 </table>
-            </div>
+            </div> -->
+
         </section>
 
         <!-- Opret Træningssession Form -->
@@ -405,6 +436,17 @@
                         <option value="2">Ungdomshold</option>
                     </select>
                 </div>
+                <input type="hidden" id="userId">
+                <div class="form-group">
+                    <label for="memberRole">Rolle:</label>
+                    <select id="memberRole" required>
+                        <option value="">Vælg rolle...</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="COACH">Træner</option>
+                        <option value="PLAYER">Spiller</option>
+                    </select>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancelMemberBtn">Annuller</button>
                     <button type="submit" class="btn btn-success">Gem</button>
@@ -439,6 +481,6 @@
 <script src="member.js"></script>
 <script src="member-list.js"></script>
 <script src="update-payment-status.js"></script>
-
+<script src="user-management.js"></script>
 </body>
 </html>

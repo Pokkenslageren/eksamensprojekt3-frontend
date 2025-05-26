@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     let members = [];
     let editingMemberId = null;
 
@@ -30,11 +29,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Luk modal
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener("click", () => memberModal.style.display = "none");
-    }
+    // Luk alle modaler via "X"
+    const closeButtons = document.querySelectorAll(".modal .close");
+    closeButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const modal = btn.closest(".modal");
+            if (modal) modal.style.display = "none";
+        });
+    });
 
+    // Luk via Annuller-knap
     if (cancelMemberBtn) {
         cancelMemberBtn.addEventListener("click", () => memberModal.style.display = "none");
     }

@@ -1,11 +1,21 @@
 let allMembers = [];
 let currentSort = { key: '', ascending: true };
 
-document.addEventListener('DOMContentLoaded', async () => {
+window.initMemberPage = async function () {
+    if (window.memberPageInitialized) return;
+    window.memberPageInitialized = true;
+
     const filterDropdown = document.getElementById('statusFilter');
+    const tableBody = document.querySelector('#membersTable tbody');
+
+    if (!filterDropdown || !tableBody) {
+        console.error('Medlemssiden kunne ikke initialiseres – mangler DOM-elementer.');
+        return;
+    }
 
     try {
-        const response = await fetch('http://localhost:8080/members');
+        const API_BASE = 'http://localhost:8080/fodboldklub/members';
+        const response = await fetch(`${API_BASE}`);
         allMembers = await response.json();
 
         renderTable(allMembers);
@@ -21,13 +31,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Failed to load members:', error);
-        document.querySelector('#memberTable tbody').innerHTML =
+        tableBody.innerHTML =
             `<tr><td colspan="4">Error loading members</td></tr>`;
     }
-});
+};
+
+
 
 function renderTable(members) {
-    const tableBody = document.querySelector('#memberTable tbody');
+    const tableBody = document.querySelector('#membersTable tbody');
+
     tableBody.innerHTML = '';
 
     members.forEach(member => {
@@ -37,6 +50,9 @@ function renderTable(members) {
             <td>${member.name}</td>
             <td>${member.email}</td>
             <td class="${getStatusClass(member.paymentStatus)}">${member.paymentStatus}</td>
+            <td>
+                <a href="update-payment-status.html?memberId=${member.memberId}" class="btn btn-primary btn-sm">Opdatér betaling</a>
+            </td>
         `;
         tableBody.appendChild(row);
     });

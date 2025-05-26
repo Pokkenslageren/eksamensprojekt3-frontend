@@ -1,3 +1,8 @@
+const params = new URLSearchParams(window.location.search);
+const memberIdFromUrl = params.get('memberId');
+if (memberIdFromUrl) {
+    document.getElementById('memberId').value = memberIdFromUrl;
+}
 document.getElementById('updateBtn').addEventListener('click', async function () {
     const memberId = document.getElementById('memberId').value;
     const status = document.getElementById('paymentStatus').value;
@@ -13,7 +18,8 @@ document.getElementById('updateBtn').addEventListener('click', async function ()
     };
 
     try {
-        const response = await fetch(`http://localhost:8080/members/${memberId}/payment-status`, {
+        const API_BASE = 'http://localhost:8080/fodboldklub/members'
+        const response = await fetch(`${API_BASE}/${memberId}/payment-status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -23,6 +29,9 @@ document.getElementById('updateBtn').addEventListener('click', async function ()
 
         if (response.ok) {
             result.textContent = 'Payment status updated successfully.';
+            setTimeout(() => {
+                window.history.back(); // or use location.href = 'index.html#betalinger';
+            }, 1500);
         } else if (response.status === 404) {
             result.textContent = 'Member not found.';
         } else if (response.status === 400) {
