@@ -14,7 +14,7 @@ document.getElementById('updateBtn').addEventListener('click', async function ()
     }
 
     const payload = {
-        status: status  // wraps it in a JSON object like { "status": "PAID" }
+        status: status
     };
 
     try {
@@ -30,7 +30,7 @@ document.getElementById('updateBtn').addEventListener('click', async function ()
         if (response.ok) {
             result.textContent = 'Payment status updated successfully.';
             setTimeout(() => {
-                window.history.back(); // or use location.href = 'index.html#betalinger';
+                window.history.back();
             }, 1500);
         } else if (response.status === 404) {
             result.textContent = 'Member not found.';

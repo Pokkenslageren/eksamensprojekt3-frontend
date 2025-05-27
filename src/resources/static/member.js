@@ -7,17 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const membersTableBody = document.querySelector("#membersTable tbody");
     const modalTitle = document.getElementById("memberModalTitle");
     const memberModal = document.getElementById("memberModal");
-    const closeButtons = document.querySelectorAll(".modal .close");
-    closeButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            btn.closest(".modal").style.display = "none";
-        });
-    });
+
 
     let members = [];
     let editingMemberId = null;
 
-    const API_BASE = "http://localhost:8080/api/members";
+    const API_BASE = "http://localhost:8080/fodboldklub/members";
 
     // Vis modal til oprettelse
     if (addMemberBtn) {
@@ -48,10 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
         return {
             name: document.getElementById("memberName").value,
             email: document.getElementById("memberEmail").value,
+            phone: document.getElementById("memberPhone").value,
             address: document.getElementById("memberAddress").value,
             dateOfBirth: document.getElementById("memberDob").value,
-            membershipType: document.getElementById("membershipType").value,
-            teamId: document.getElementById("memberTeam").value || null
+            paymentStatus: document.getElementById("paymentStatus").value
         };
     }
 
@@ -84,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Gem eller opdater medlem
+
     if (memberForm) {
         memberForm.addEventListener("submit", async (e) => {
             e.preventDefault();

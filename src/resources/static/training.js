@@ -4,13 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initTrainingPage();
 });
 
-/**
- * Initialize the training page functionality
- */
 function initTrainingPage() {
     console.log("Initializing training page...");
 
-    // Prevent double initialization
+
     if (window.trainingPageInitialized) {
         return;
     }
@@ -23,9 +20,7 @@ function initTrainingPage() {
     setupEventListeners();
 }
 
-/**
- * Set up all event listeners for the training page
- */
+
 function setupEventListeners() {
     const addTrainingBtn = document.getElementById('addTrainingBtn');
     if (addTrainingBtn) {
@@ -58,9 +53,7 @@ function setupEventListeners() {
     }
 }
 
-/**
- * Handle form submission with proper error handling
- */
+
 function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -77,9 +70,7 @@ function handleFormSubmit(e) {
         });
 }
 
-/**
- * Show the training creation page
- */
+
 function showCreateTrainingPage() {
     resetTrainingFormMode();
 
@@ -92,9 +83,7 @@ function showCreateTrainingPage() {
     setDefaultFormValues();
 }
 
-/**
- * Reset the training form to its initial state
- */
+
 function resetTrainingForm() {
     const form = document.getElementById('trainingForm');
     form.reset();
@@ -103,9 +92,7 @@ function resetTrainingForm() {
     exercisesTable.innerHTML = '';
 }
 
-/**
- * Set default values for the form
- */
+
 function setDefaultFormValues() {
     const today = new Date();
     const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
@@ -116,9 +103,7 @@ function setDefaultFormValues() {
     document.getElementById('location').value = 'Farum Park';
 }
 
-/**
- * Show the training overview page
- */
+
 function showTrainingPage() {
     const pages = document.querySelectorAll('.page');
     pages.forEach(page => page.classList.remove('active'));
@@ -127,17 +112,13 @@ function showTrainingPage() {
     loadSessions();
 }
 
-/**
- * Cancel training form and return to main training page
- */
+
 function cancelTrainingForm() {
     console.log("Canceling training form");
     showTrainingPage();
 }
 
-/**
- * Load available exercises from the backend
- */
+
 function loadExercises() {
     console.log("Loading exercises...");
 
@@ -167,9 +148,7 @@ function loadExercises() {
         });
 }
 
-/**
- * Create fallback exercises when API fails
- */
+
 function createFallbackExercises() {
     console.log("Creating fallback exercises");
     window.availableExercises = [
@@ -181,9 +160,7 @@ function createFallbackExercises() {
     ];
 }
 
-/**
- * Load teams for the team select
- */
+
 function loadTeams() {
     console.log("Loading teams...");
 

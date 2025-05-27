@@ -11,9 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-/**
- * Initialize navigation between pages
- */
+
 function initNavigation() {
     const navItems = document.querySelectorAll('.sidebar li');
 
@@ -57,16 +55,14 @@ function showPage(pageId) {
         loadExercisesManagement();
     }
 
-    // ✅ New: initialize the member page
+
     if (pageId === 'betalinger' && typeof initMemberPage === 'function') {
-        setTimeout(() => initMemberPage(), 50); // slight delay after page is shown
+        setTimeout(() => initMemberPage(), 50);
     }
 
 }
 
-/**
- * Handle logout button click
- */
+
 function handleLogout() {
     // For now, just confirm and redirect to login
     if (confirm('Er du sikker på, at du vil logge ud?')) {

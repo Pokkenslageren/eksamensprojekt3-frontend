@@ -1,16 +1,10 @@
-/**
- * Exercise management functionality
- */
 
 document.addEventListener('DOMContentLoaded', function() {
     initExercisesPage();
 });
 
-/**
- * Initialize the exercises page
- */
+
 function initExercisesPage() {
-    // Prevent double initialization
     if (window.exercisesPageInitialized) {
         return;
     }
@@ -19,9 +13,7 @@ function initExercisesPage() {
     setupEventListeners();
 }
 
-/**
- * Set up all event listeners for exercises page
- */
+
 function setupEventListeners() {
     const addExerciseBtn = document.getElementById('addExerciseManageBtn');
     if (addExerciseBtn) {
@@ -75,9 +67,7 @@ function setupEventListeners() {
     });
 }
 
-/**
- * Load and display exercises
- */
+
 function loadExercisesManagement() {
     console.log("Loading exercises for management...");
 
@@ -100,9 +90,7 @@ function loadExercisesManagement() {
         });
 }
 
-/**
- * Display exercises in the management table
- */
+
 function displayExercises(exercises) {
     const tableBody = document.querySelector('#exercisesManageTable tbody');
     if (!tableBody) {
@@ -137,9 +125,7 @@ function displayExercises(exercises) {
     setupTableEventListeners();
 }
 
-/**
- * Set up event listeners for table buttons
- */
+
 function setupTableEventListeners() {
     document.querySelectorAll('.edit-exercise').forEach(button => {
         const newButton = button.cloneNode(true);
@@ -162,9 +148,7 @@ function setupTableEventListeners() {
     });
 }
 
-/**
- * Show the add exercise modal
- */
+
 function showAddExerciseModal() {
     console.log("Showing add exercise modal");
 
@@ -176,23 +160,17 @@ function showAddExerciseModal() {
     document.getElementById('exerciseModal').style.display = 'block';
 }
 
-/**
- * Close the exercise modal
- */
+
 function closeExerciseModal() {
     document.getElementById('exerciseModal').style.display = 'none';
 }
 
-/**
- * Close the delete confirmation modal
- */
+
 function closeDeleteModal() {
     document.getElementById('confirmDeleteExerciseModal').style.display = 'none';
 }
 
-/**
- * Edit an exercise
- */
+
 function editExercise(exerciseId) {
     console.log("Editing exercise with ID:", exerciseId);
 
@@ -220,9 +198,7 @@ function editExercise(exerciseId) {
         });
 }
 
-/**
- * Confirm delete exercise
- */
+
 function confirmDeleteExercise(exerciseId) {
     console.log("Confirming delete for exercise ID:", exerciseId);
 
@@ -278,9 +254,7 @@ function deleteExercise(exerciseId) {
         });
 }
 
-/**
- * Handle exercise form submission
- */
+
 function handleExerciseSubmit(event) {
     event.preventDefault();
 
@@ -354,9 +328,7 @@ function handleExerciseSubmit(event) {
         });
 }
 
-/**
- * Validate the exercise form
- */
+
 function validateExerciseForm() {
     const name = document.getElementById('exerciseName').value.trim();
     if (!name) {
